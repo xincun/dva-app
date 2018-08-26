@@ -1,3 +1,5 @@
+import { delay } from 'dva/saga';
+
 const insert = (arr, index, ...newItems) => [
     // part of the array before the specified index
     ...arr.slice(0, index),
@@ -17,7 +19,7 @@ export default {
     namespace: 'products',
     state: {
         datas:[],
-        need_load:false,
+        loading:true,
     },
     reducers: {
         'delete'(state, { payload: id }) {
@@ -25,9 +27,15 @@ export default {
             return state.datas.filter(item => item.id !== id);
         },
         'load'(state) {
-            console.log('loading', state);
+            console.log('load', state);
             state.datas = insert(state.datas, 0, { name: 'abc1111', id: 3 });
-            return state.datas
+            state.loading = false;
+            return {...state};
+        },
+        'loading'(state) {
+            console.log('loading', state);
+            state.loading = true;
+            return {...state};
         },
     },
     effects: {
@@ -35,8 +43,10 @@ export default {
             console.log('save', action.payload);
             // const isLogin = yield select(state => state.isLogin);
             // console.log('logincheck', isLogin);
-
-            yield call(saveToService, action.payload);
+            
+            yield put({ type: 'loading' });
+            //yield call(saveToService, action.payload);
+            yield delay(5000)
             yield put({ type: 'load' });
         }
     },

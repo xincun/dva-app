@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Popconfirm, Button } from 'antd';
 
-const ProductList = ({ onDelete, products, loading }) => {
+const ProductList = ({ onDelete, products }) => {
 
     console.log("products", products);
 
@@ -23,18 +23,17 @@ const ProductList = ({ onDelete, products, loading }) => {
     }];
     return (
         <Table
-            dataSource={products}
+            dataSource={products.datas}
             columns={columns}
             bordered
-            loading={loading}
+            loading={products.loading}
         />
     );
 };
 
 ProductList.propTypes = {
     onDelete: PropTypes.func.isRequired,
-    products: PropTypes.array.isRequired,
-    // loading: PropTypes.boolean.isRequired,
+    products: PropTypes.object.isRequired,
 };
 
 export default ProductList;
